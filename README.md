@@ -1,2 +1,3 @@
-# rara
-Remote Amorphous Resource Archive
+# Rara
+
+RESTful Amorphous Resource Archive
