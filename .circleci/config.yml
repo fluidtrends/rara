@@ -26,7 +26,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: ~/chunky/tmp
+          at: ~/root/tmp
       - run:
           name: Install main dependencies
           command: npm install
