@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 
 const savor = require('savor')
-const { Archive, File } = require('../../src')
+const { Archive, File } = require('../..')
 const fs = require('fs-extra')
 
 savor.

@@ -1,6 +1,6 @@
 {
   "name": "rara",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Remote Armophous Resource Archive",
   "scripts": {
     "test": "savor test",
@@ -10,6 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/fluidtrends/rara.git"
   },
+  "main": "index.js",
   "author": "I. Dan Calinescu <idancalinescu@gmail.com>",
   "license": "MIT",
   "bugs": {
@@ -18,12 +19,13 @@
   "homepage": "https://github.com/fluidtrends/rara",
   "dependencies": {
     "@octokit/rest": "^16.43.1",
+    "cassi": "^1.1.0",
     "coreutils": "^0.3.0",
     "ejs": "^3.0.1",
     "fs-extra": "^7.0.0",
     "fs-readdir-recursive": "^1.1.0",
     "image-downloader": "^3.5.0",
-    "js-base64": "^2.5.1",
+    "js-base64": "^2.5.2",
     "lali": "^0.3.2",
     "uuid": "^3.0.0"
   },
