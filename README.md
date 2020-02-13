@@ -3,6 +3,7 @@
 <h1 align="center"> Rara </h1>
 <h3 align="center"> RESTful Amorphous Resource Archiver </h3>
 <p align="center"> Manage archives like they are APIs </p>
+<p align="center"> <img src="https://img.shields.io/github/package-json/v/idancali/rara?color=green"/></p>
 
 </p>
 
