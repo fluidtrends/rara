@@ -45,7 +45,7 @@ class _ {
         return this._manifest
     }
 
-    initialize() {        
+    initialize() {       
         return npm.manifest(this.id + this.version ? `@${this.version}` : "").then((manifest) => {
             this._version = `${manifest.version}`
             this._manifest = Object.assign({}, manifest)
@@ -68,7 +68,8 @@ class _ {
     }
 
     download () {
-        return this.initialize().then(() => npm.extract(this.archiveId, this.props))
+        return this.initialize()
+                   .then(() => npm.extract(this.archiveId, this.props))
     }
 }
 
