@@ -1,7 +1,7 @@
 const ejs = require('ejs')
 const fs = require('fs-extra')
 const path = require('path')
-const { FileAdapter } = require('binda')
+const { FileAdapter, ImageAdapter } = require('binda')
 class _ {
     constructor(props) {
         this._props = Object.assign({}, props)
@@ -49,9 +49,9 @@ class _ {
         }
     }
 
-    get isCompilable() {
-        return !_.NONCOMPILABLE_TYPES.includes(this.type)
-    }
+    // get isCompilable() {
+    //     return !_.NONCOMPILABLE_TYPES.includes(this.type)
+    // }
 
     compile(args, options = {}) {
         if (!this.isCompilable) {
@@ -94,7 +94,7 @@ class _ {
         this.detectType()
 
         // Compile the file if necessary
-        return this.compile(args, options)
+        return this.adapt(args, options)
     }
 
     copy(dest) {
@@ -151,12 +151,12 @@ _.TYPES = {
 }
 
 _.TYPE_ADAPTERS = {
-    ASSET: AssetAdapter,
+//     ASSET: AssetAdapter,
     IMAGE: ImageAdapter,
-    JSON: JSONAdapter,
-    JAVASCRIPT: JSAdapter,
-    CSS: CSSAdapter,
-    MARKDOWN: MDAdapter
+//     JSON: JSONAdapter,
+//     JAVASCRIPT: JSAdapter,
+//     CSS: CSSAdapter,
+//     MARKDOWN: MDAdapter
 }
 
 _.NONCOMPILABLE_TYPES = [ _.TYPES.ASSET, _.TYPES.IMAGE ]
