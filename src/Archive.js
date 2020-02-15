@@ -18,7 +18,7 @@ class _ {
     }
 
     get archiveId() {
-        return (this.id + (this.version ? `@${this.version}` : ""))
+        return this.id + (this.version ? `@${this.version}` : "")
     }
 
     get version() {
