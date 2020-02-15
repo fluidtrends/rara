@@ -60,5 +60,15 @@ add('should download the latest version', (context, done) => {
     })
 }).
 
+add('should build the archive ID correctly', (context, done) => {
+    const archive = new Archive({ dir: context.dir, id: 'test-archive' })
+    const stub = context.stub(npm, 'manifest').callsFake(() => Promise.resolve({ version: "1.0.0" }))
+
+    savor.promiseShouldSucceed(archive.initialize(), done, (output) => {
+        context.expect(archive.archiveId).to.equal('test-archive@1.0.0')
+        stub.restore()
+    })
+}).
+
 
 run('[Rara] Archive')

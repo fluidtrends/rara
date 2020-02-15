@@ -18,7 +18,7 @@ class _ {
     }
 
     get archiveId() {
-        return (this.id + this.version ? `@${this.version}` : "")
+        return (this.id + (this.version ? `@${this.version}` : ""))
     }
 
     get version() {
@@ -69,7 +69,7 @@ class _ {
 
     download () {
         return this.initialize()
-                   .then(() => npm.extract(this.archiveId, this.props))
+                   .then(() => npm.extract(this.archiveId, this.path, this.props))
     }
 }
 
