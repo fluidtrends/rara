@@ -46,7 +46,7 @@ class _ {
     }
 
     initialize() {       
-        return npm.manifest(this.id + (this.version? `@${this.version}` : "")).then((manifest) => {
+        return npm.manifest(this.archiveId).then((manifest) => {
             this._version = `${manifest.version}`
             this._manifest = Object.assign({}, manifest)
         })
