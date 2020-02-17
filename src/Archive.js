@@ -18,11 +18,11 @@ class _ {
     }
 
     get archiveId() {
-        return (this.id + this.version ? `@${this.version}` : "")
+        return this.id + (this.version ? `@${this.version}` : "")
     }
 
     get version() {
-        return this._version
+        return this.props.version || this._version
     }
 
     get dir () {
@@ -45,8 +45,8 @@ class _ {
         return this._manifest
     }
 
-    initialize() {       
-        return npm.manifest(this.id + this.version ? `@${this.version}` : "").then((manifest) => {
+    initialize() { 
+        return npm.manifest(this.archiveId).then((manifest) => {
             this._version = `${manifest.version}`
             this._manifest = Object.assign({}, manifest)
         })
@@ -69,7 +69,7 @@ class _ {
 
     download () {
         return this.initialize()
-                   .then(() => npm.extract(this.archiveId, this.props))
+                   .then(() => npm.extract(this.archiveId, this.path, this.props))
     }
 }
 
