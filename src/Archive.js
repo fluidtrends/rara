@@ -68,7 +68,7 @@ class _ {
             this._files = readDir(path.resolve(this.path)).map(filepath => new File({ dir: this.path, filepath: filepath }))
 
             // Let's actually load all the files
-            return Promise.all(this.files.map(file => file.load()))
+            return Promise.all(this.files.map(file => file.load())).then(() => this)
         })
     }
 
