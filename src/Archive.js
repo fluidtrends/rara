@@ -72,6 +72,13 @@ class _ {
         })
     }
 
+    save(dest, args = {}) {
+        // Make sure the destination exists
+        fs.existsSync(dest) || fs.mkdirsSync(dest)
+
+        return this.load().then(() => Promise.all(this.files.map(file => file.save(dest, args)))) 
+    }
+
     download () {
         return this.initialize()
                    .then(() => npm.extract(this.archiveId, this.path, this.props))

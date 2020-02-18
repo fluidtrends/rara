@@ -98,6 +98,10 @@ class _ {
     }
 
     copy(dest) {
+        // Create sub directories if necessary
+        const dir = path.resolve(dest, path.dirname(this.filepath))
+        fs.existsSync(dir) || fs.mkdirs(dir)
+
         return new Promise((resolve, reject) => {
             // Let's move the file over
             fs.copySync(this.path, path.resolve(dest, this.filepath))
@@ -111,6 +115,7 @@ class _ {
             // First make sure the file exists
             return Promise.reject(new Error(_.ERRORS.CANNOT_SAVE('it does not exist')))
         }
+        
         if (!fs.existsSync(dest)) {
             // First make sure the destination location
             return Promise.reject(new Error(_.ERRORS.CANNOT_SAVE('the destination does not exist')))
@@ -119,14 +124,14 @@ class _ {
         // Let's see if this is a recognized file type 
         this.detectType()
 
-        // Create sub directories if necessary
-        const dir = path.resolve(this.dir, path.dirname(this.filepath))
-        fs.exists(dir) || fs.mkdirs(dir)
-
         if (!this.isCompilable) {
             // Let's move the file over
             return this.copy(dest)
         }
+
+        // Create sub directories if necessary
+        const dir = path.resolve(dest, path.dirname(this.filepath))
+        fs.existsSync(dir) || fs.mkdirsSync(dir)
 
         // Load and then save it
         return this.load(args).then((output) => {
