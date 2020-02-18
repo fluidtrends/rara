@@ -46,6 +46,11 @@ class _ {
     }
 
     initialize() { 
+        if (this.version) {
+            // No need to fetch the version
+            return Promise.resolve()
+        }
+
         return npm.manifest(this.archiveId).then((manifest) => {
             this._version = `${manifest.version}`
             this._manifest = Object.assign({}, manifest)

@@ -79,7 +79,6 @@ add('should download a specific package version', (context, done) => {
 
     savor.promiseShouldSucceed(archive.download(), done, (output) => {
         context.expect(archive.version).to.equal('1.1.3')
-        context.expect(archive.manifest.version).to.equal('1.1.3')
         stub.restore()
         stub2.restore()
     })
