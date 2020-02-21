@@ -9,10 +9,8 @@ class _ {
 
     get archiveFiles() {
         return [
-            { assets: [
-                "assets/text/**/*", 
-                "assets/hello.png"
-            ]}
+            "assets/text/**/*", 
+            "assets/hello.png"
         ]
     }
 
