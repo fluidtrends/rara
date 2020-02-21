@@ -97,6 +97,7 @@ class _ {
                 
                 //HELP NEEDED here
                 // resolve(adapter.process())
+                resolve()
             } catch (error) {
                 reject(new Error(_.ERRORS.CANNOT_LOAD(error.message)))
             }
