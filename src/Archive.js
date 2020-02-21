@@ -2,6 +2,7 @@ const fs = require('fs-extra')
 const path = require('path')
 const readDir = require('fs-readdir-recursive')
 const File = require('./File')
+const Template = require('./Template')
 const npm = require('libnpm')
 
 class _ {
@@ -41,6 +42,10 @@ class _ {
         return this._files
     }
 
+    get templates() {
+        return this._templates
+    }
+
     get manifest() {
         return this._manifest
     }
@@ -63,7 +68,12 @@ class _ {
                 // First make sure the archive exists
                 return Promise.reject(new Error(_.ERRORS.CANNOT_LOAD('it does not exist')))
             }
-    
+
+            // Let's look up templates, if any
+            const templatesDir = path.resolve(this.path, 'templates')
+            this._templates = {}
+            fs.existsSync(templatesDir) && fs.readdirSync(templatesDir).map(name => this._templates[name] = new Template({ dir: this.path, name }))
+
             // List out all the files
             this._files = readDir(path.resolve(this.path)).map(filepath => new File({ dir: this.path, filepath: filepath }))
 
