@@ -7,13 +7,18 @@ class _ {
         return this._props
     }
 
+    get archiveFiles() {
+        return [
+            { assets: [
+                "assets/text/**/*", 
+                "assets/hello.png"
+            ]}
+        ]
+    }
+
     get files() {
         return [
-            "test.json",
-            { assets: [
-                "../../assets/text/**/*", 
-                "../../assets/hello.png"
-            ]}
+            "test.json"
         ]
     }
 }
