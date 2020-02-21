@@ -51,7 +51,7 @@ add('should load a valid template from an archive', (context, done) => {
         stub.restore()
         stub2.restore()
         context.expect(template.content.props.test).to.equal(props.test)
-        context.expect(template.content.files.length).to.equal(2)
+        context.expect(template.content.files.length).to.equal(1)
     })
 }).
 
