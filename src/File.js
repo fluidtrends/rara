@@ -2,6 +2,7 @@ const ejs = require('ejs')
 const fs = require('fs-extra')
 const path = require('path')
 const { FileAdapter, ImageAdapter} = require('binda')
+
 class _ {
     constructor(props) {
         this._props = Object.assign({}, props)

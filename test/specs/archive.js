@@ -42,7 +42,7 @@ add('should load a valid archive', (context, done) => {
     savor.promiseShouldSucceed(archive.load(), done, (output) => {
         stub.restore()
         stub2.restore()
-        context.expect(archive.files.length).to.equal(8)
+        context.expect(archive.files.length).to.equal(12)
     })
 }).
 
