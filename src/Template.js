@@ -47,16 +47,7 @@ class _ {
     }
 
     saveGlobs({ dest, glob, props }) {
-        if ("string" === typeof glob) {
-            return cpy(glob, dest, props)
-        }
-
-        const destDir = path.resolve(dest, Object.keys(glob)[0])
-        const files = Object.values(glob)[0]
-
-        fs.existsSync(destDir) || fs.mkdirsSync(destDir)
-         
-        return cpy(files, destDir, props)
+        return cpy(glob, dest, props)
     }
 
     save(dest, props) {
@@ -69,8 +60,8 @@ class _ {
         fs.existsSync(dest) || fs.mkdirsSync(dest)
 
         // Save all the local and global globs
-        return Promise.all(this.content.files.map(glob => this.saveGlobs({ dest, glob, props: { cwd: this.path, parents: false }}))
-                   .concat(this.content.archiveFiles.map(glob => this.saveGlobs({ dest, glob, props: { cwd: this.dir, parents: false }}))))
+        return Promise.all(this.content.files.map(glob => this.saveGlobs({ dest, glob, props: { cwd: this.path, parents: true }}))
+                   .concat(this.content.archiveFiles.map(glob => this.saveGlobs({ dest, glob, props: { cwd: this.dir, parents: true }}))))
     }
 }
 
