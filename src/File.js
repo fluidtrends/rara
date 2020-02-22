@@ -33,7 +33,7 @@ class _ {
     }  
     
     get adapter () {
-        return this._type || 'ASSET'
+        return this._adapter
     }
 
     detectType () {
@@ -41,7 +41,6 @@ class _ {
             // Not necessary
             return 
         }
-
         // Figure out the file's extension
         const ext = path.extname(this.path).toUpperCase().substring(1)
 
@@ -51,6 +50,8 @@ class _ {
                 this._type = values
                 // Trying to reuse to same function to save not just the type (value), but the overall category
                 this._adapter = type
+
+                
                 return 
             }
         }
@@ -68,8 +69,6 @@ class _ {
             try {
                 // Attempt to load the file 
                 // HELP NEEDED not sure if I just read the stream like this or need to pipe it
-                
-
                 const readStream = fs.createReadStream(this.path)
 
                 if (!readStream) {
@@ -92,7 +91,7 @@ class _ {
                 }
 
                 // HELP NEEDED Robi: not sure how do I call the image adapter, for example (process or download?)
-                //Might be an idea to use the same name for the main function of the adapters (like process)
+                //Might be an idea to use the same name for the main function of the adapters (like process())
 
                 
                 //HELP NEEDED here
