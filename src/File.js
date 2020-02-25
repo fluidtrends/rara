@@ -1,7 +1,7 @@
 const ejs = require('ejs')
 const fs = require('fs-extra')
 const path = require('path')
-const { FileAdapter, ImageAdapter} = require('binda')
+const { FileAdapter} = require('binda')
 class _ {
     constructor(props) {
         this._props = Object.assign({}, props)
@@ -62,8 +62,6 @@ class _ {
 
     process(args, options = {}) {
 
-
-
         return new Promise((resolve, reject) => {
             try {
                 // Attempt to load the file 
@@ -77,25 +75,10 @@ class _ {
                 }
 
                 // Create a new adapter
+                const adapter = new FileAdapter()
 
-                let adapter
-
-                switch (this.adapter) {
-                    case 'IMAGE':
-                        adapter = new ImageAdapter(readStream)
-                        break;
-                    default:
-                        adapter = new FileAdapter(readStream)
-                        break;
-                }
-
-                // HELP NEEDED Robi: not sure how do I call the image adapter, for example (process or download?)
-                //Might be an idea to use the same name for the main function of the adapters (like process())
-
+                resolve(adapter.process(readStream))
                 
-                //HELP NEEDED here
-                // resolve(adapter.process())
-                resolve()
             } catch (error) {
                 reject(new Error(_.ERRORS.CANNOT_LOAD(error.message)))
             }
