@@ -5,6 +5,7 @@ const { Archive, File } = require('../..')
 const path = require('path')
 const fs = require('fs-extra')
 const npm = require('libnpm')
+const npmcore = require('npm')
 
 savor.
 
@@ -99,7 +100,5 @@ add('should save to a destination', (context, done) => {
         context.expect(fs.existsSync(path.resolve(context.dir, 'dest', 'test.js'))).to.be.true
     })
 }).
-
-
 
 run('[Rara] Archive')
