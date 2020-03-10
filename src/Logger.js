@@ -13,7 +13,7 @@ class _ {
         return this.props.silent
     }
 
-    raw() {
+    get raw() {
         return this._raw
     }
 
