@@ -4,12 +4,14 @@ const readDir = require('fs-readdir-recursive')
 const File = require('./File')
 const Template = require('./Template')
 const Installer = require('./Installer')
+const Logger = require('./Logger')
 const libnpm = require('libnpm')
 
 class _ {
     constructor(props) {
         this._props = Object.assign({}, props)
         this._installer = new Installer(this)
+        this._logger = new Logger(props)
     }
 
     get props() {
@@ -18,6 +20,10 @@ class _ {
 
     get installer() {
         return this._installer
+    }
+
+    get logger() {
+        return this._logger
     }
 
     get id() {
@@ -56,13 +62,17 @@ class _ {
         return this._manifest
     }
 
+    get npmOptions() {
+        return { log: this.logger.raw }
+    }
+
     initialize() { 
         if (this.version) {
             // No need to fetch the version
             return Promise.resolve()
         }
 
-        return libnpm.manifest(this.archiveId).then((manifest) => {
+        return libnpm.manifest(this.archiveId, this.npmOptions).then((manifest) => {
             this._version = `${manifest.version}`
             this._manifest = Object.assign({}, manifest)
         })
@@ -70,7 +80,7 @@ class _ {
 
     installDependencies() {
         return this.initialize()
-                   .then(() => this.installer.npm.install())
+                   .then(() => this.installer.npm.install(this.npmOptions))
     }
 
     load() {
@@ -102,7 +112,7 @@ class _ {
 
     download () {
         return this.initialize()
-                   .then(() => libnpm.extract(this.archiveId, this.path, this.props))
+                   .then(() => libnpm.extract(this.archiveId, this.path, this.npmOptions))
     }
 }
 
