@@ -17,12 +17,8 @@ class _ {
         return this._raw
     }
 
-    _log(level) {
-       return (category, ...args) => process.emit('log', level, category, ...args)
-    }
-
     log(level) {
-        this.silent || this._log(level)
+       return (category, ...args) => this.silent || process.emit('log', level, category, ...args)
     }
 }
 
