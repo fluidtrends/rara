@@ -1,7 +1,10 @@
 class _ {
     constructor(props) {
         this._props = Object.assign({}, props)
-        this._raw = {}
+        this._raw = {
+            clearProgress: Function.prototype,
+            showProgress: Function.prototype
+        }
         _.LEVELS.map(level => this._raw[level] = this.log(level))
     }
 
