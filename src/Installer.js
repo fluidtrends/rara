@@ -18,31 +18,31 @@ class _ {
         }
 
         const startTime = Date.now()
-        process.chdir(this.archive.path)
 
-        return new Promise((resolve, reject) => {
-            npm.load({}, (err, n) => {
-                if (err) {
-                    reject(err)
-                    return
-                }
+        const pkg = JSON.parse(fs.readFileSync(path.resolve(this.archive.path, 'package.json'), 'utf8'))
+        pkg.scripts.___ = `npm ${command} ${options.join(' ')}`
 
-                n.commands[command]((error, result) => {
-                    if (error) {
-                        reject(error)
-                        return
-                    }
-                    
-                    const totalTime = (Date.now() - startTime)
-                    resolve (Object.assign({}, result, { totalTime }))
-                })
-            })
-        })
+        const stdout = process.stdout.write
+        process.stdout.write = Function.prototype
+
+        const opts = Object.assign({}, { 
+            dir: this.archive.path,
+            silent: true,
+            stdio: ['ignore', 'ignore', 'ignore'],
+            config: {}
+        }, this.archive.npmOptions)
+
+        return libnpm.runScript(pkg, "___", null, opts)
+                     .then(() => {
+                        const totalTime = (Date.now() - startTime)        
+                        process.stdout.write = stdout
+                        return { totalTime, installed: true }
+                     }) 
     }
 
     get npm() {
         return {
-            install: (options) => this._npm('install', options)
+            install: () => this._npm('install', ['--loglevel=error', '--no-progress', '--silent', '--no-audit'])
         }
     }
 }
