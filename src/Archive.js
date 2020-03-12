@@ -43,7 +43,7 @@ class _ {
     }
 
     get path() {
-        return (!this.dir || !this.id || !this.version) ? null : path.resolve(this.dir, this.id, this.version)
+        return (!this.dir || !this.id || !this.version) ? null : path.resolve(this.dir, this.id, this.version, this.id)
     }
 
     get exists() {
