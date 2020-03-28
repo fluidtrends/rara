@@ -24,7 +24,7 @@ add('should not load an archive with invalid files', (context, done) => {
     const stub = context.stub(npm, 'extract').callsFake(() => Promise.resolve({ version: '1' }))
     const stub2 = context.stub(npm, 'manifest').callsFake(() => Promise.resolve({ version: '1' }))
 
-    savor.addAsset('assets/invalid-archive', 'invalid-archive/1', context)
+    savor.addAsset('assets/invalid-archive', 'invalid-archive/1/invalid-archive', context)
 
     savor.promiseShouldFail(archive.load(), done, (error) => {
         stub.restore()
@@ -38,12 +38,12 @@ add('should load a valid archive', (context, done) => {
     const stub = context.stub(npm, 'extract').callsFake(() => Promise.resolve({ version: '1' }))
     const stub2 = context.stub(npm, 'manifest').callsFake(() => Promise.resolve({ version: '1' }))
 
-    savor.addAsset('assets/test-archive', 'test-archive/1', context)
+    savor.addAsset('assets/test-archive', 'test-archive/1/test-archive', context)
 
     savor.promiseShouldSucceed(archive.load(), done, (output) => {
         stub.restore()
         stub2.restore()
-        context.expect(archive.files.length).to.equal(12)
+        context.expect(archive.files.length).to.equal(9)
     })
 }).
 
@@ -52,7 +52,7 @@ add('should download the latest version', (context, done) => {
     const stub = context.stub(npm, 'extract').callsFake(() => Promise.resolve({ version: '1' }))
     const stub2 = context.stub(npm, 'manifest').callsFake(() => Promise.resolve({ version: '1' }))
 
-    savor.addAsset('assets/test-archive', 'test-archive/1', context)
+    savor.addAsset('assets/test-archive', 'test-archive/1/test-archive', context)
 
     savor.promiseShouldSucceed(archive.download(), done, (output) => {
         context.expect(archive.version).to.equal('1')
@@ -77,27 +77,12 @@ add('should download a specific package version', (context, done) => {
     const stub = context.stub(npm, 'extract').callsFake(() => Promise.resolve({ version: '1.1.3' }))
     const stub2 = context.stub(npm, 'manifest').callsFake(() => Promise.resolve({ version: '1.1.3' }))
 
-    savor.addAsset('assets/test-archive', 'test-archive/1', context)
+    savor.addAsset('assets/test-archive', 'test-archive/1/test-archive', context)
 
     savor.promiseShouldSucceed(archive.download(), done, (output) => {
         context.expect(archive.version).to.equal('1.1.3')
         stub.restore()
         stub2.restore()
-    })
-}).
-
-add('should save to a destination', (context, done) => {
-    const archive = new Archive({ dir: context.dir, id: 'test-archive', version: '1' })
-    const dest = path.resolve(context.dir, 'dest')
-
-    savor.addAsset('assets/test-archive', 'test-archive/1', context)
-
-    // It shouldn't be there yet
-    context.expect(fs.existsSync(path.resolve(context.dir, 'dest', 'test.js'))).to.be.false
-
-    savor.promiseShouldSucceed(archive.save(dest, { info: "test" }), done, () => {
-        // Make sure it was saved
-        context.expect(fs.existsSync(path.resolve(context.dir, 'dest', 'test.js'))).to.be.true
     })
 }).
 

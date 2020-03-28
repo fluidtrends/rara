@@ -80,7 +80,28 @@ class _ {
 
     installDependencies() {
         return this.initialize()
-                   .then(() => this.installer.npm.install(this.npmOptions))
+                   .then(() => this.installer.install(this.npmOptions))
+    }
+
+    loadTemplates() {
+        const templatesDir = path.resolve(this.path, 'templates')
+        this._templates = {}
+        fs.existsSync(templatesDir) && fs.readdirSync(templatesDir).map(name => this._templates[name] = new Template({ dir: this.path, name }))
+    }
+
+    ignoreFileIfNecessary(f) {
+        return _.IGNORES.filter(i => f.startsWith(i)).length === 0
+    }
+
+    loadFiles() {
+        // List out all the files
+        const rawFiles =  readDir(path.resolve(this.path)).filter(f => this.ignoreFileIfNecessary(f))
+
+        // Look for the ones we care about
+        this._files = rawFiles.map(filepath => new File({ dir: this.path, filepath: filepath }))
+
+        // Let's actually load all the files
+        return Promise.all(this.files.map(file => file.load())).then(() => this)
     }
 
     load() {
@@ -91,15 +112,10 @@ class _ {
             }
 
             // Let's look up templates, if any
-            const templatesDir = path.resolve(this.path, 'templates')
-            this._templates = {}
-            fs.existsSync(templatesDir) && fs.readdirSync(templatesDir).map(name => this._templates[name] = new Template({ dir: this.path, name }))
+            this.loadTemplates()
 
-            // List out all the files
-            this._files = readDir(path.resolve(this.path)).map(filepath => new File({ dir: this.path, filepath: filepath }))
-
-            // Let's actually load all the files
-            return Promise.all(this.files.map(file => file.load())).then(() => this)
+            // Load up all the files we care about
+            return this.loadFiles()
         })
     }
 
@@ -119,5 +135,13 @@ class _ {
 _.ERRORS = {
     CANNOT_LOAD: (reason) => reason ? `Cannot load archive because ${reason}` : `Cannot load archive`
 }
+
+_.IGNORES = [
+    "node_modules", 
+    "test",
+    "package.json",
+    "package-lock.json",
+    "assets/text/intro.md"
+]
 
 module.exports = _

@@ -12,6 +12,10 @@ class _ {
         return this._archive
     }
 
+    get npmManifestFile() {
+        return path.resolve(this.archive.path, 'package.json')
+    }
+
     _npm(command, options) {
         if (fs.existsSync(path.resolve(this.archive.path, 'node_modules'))) {
             return Promise.resolve({ totalTime: 0, alreadyInstalled: true })
@@ -19,7 +23,8 @@ class _ {
 
         const startTime = Date.now()
 
-        const pkg = JSON.parse(fs.readFileSync(path.resolve(this.archive.path, 'package.json'), 'utf8'))
+        const pkg = JSON.parse(fs.readFileSync(this.npmManifestFile, 'utf8'))
+        pkg.scripts = pkg.scripts || {}
         pkg.scripts.___ = `npm ${command} ${options.join(' ')}`
 
         const stdout = process.stdout.write
@@ -32,18 +37,28 @@ class _ {
             config: {}
         }, this.archive.npmOptions)
 
-        return libnpm.runScript(pkg, "___", null, opts)
+        return new Promise((resolve, reject) => {
+            libnpm.runScript(pkg, "___", null, opts)
                      .then(() => {
                         const totalTime = (Date.now() - startTime)        
                         process.stdout.write = stdout
-                        return { totalTime, installed: true }
+                        resolve ({ totalTime, installed: true })
                      }) 
+                     .catch((error) => {
+                        process.stdout.write = stdout
+                        reject(error)
+                     })
+        })
     }
 
-    get npm() {
-        return {
-            install: () => this._npm('install', ['--loglevel=error', '--no-progress', '--silent', '--no-audit'])
+    install() {
+        const npmManifest = this.npmManifestFile
+
+        if (!fs.existsSync(npmManifest)) {
+            return Promise.resolve({ totalTime: 0, skipped: true })
         }
+
+        return this._npm('install', ['--loglevel=error', '--no-progress', '--silent', '--no-audit'])
     }
 }
 
