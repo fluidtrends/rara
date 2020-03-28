@@ -13,7 +13,7 @@ add('should find a valid template in an archive', (context, done) => {
     const stub = context.stub(npm, 'extract').callsFake(() => Promise.resolve({ version: '1' }))
     const stub2 = context.stub(npm, 'manifest').callsFake(() => Promise.resolve({ version: '1' }))
 
-    savor.addAsset('assets/test-archive', 'test-archive/1', context)
+    savor.addAsset('assets/test-archive', 'test-archive/1/test-archive', context)
 
     savor.promiseShouldSucceed(archive.load(), done, (output) => {
         stub.restore()
@@ -25,26 +25,12 @@ add('should find a valid template in an archive', (context, done) => {
     })
 }).
 
-add('should handle an invalid template in an archive', (context, done) => {
-    const archive = new Archive({ dir: context.dir, id: 'test-archive', version: '1' })
-    const stub = context.stub(npm, 'extract').callsFake(() => Promise.resolve({ version: '1' }))
-    const stub2 = context.stub(npm, 'manifest').callsFake(() => Promise.resolve({ version: '1' }))
-
-    savor.addAsset('assets/test-archive2', 'test-archive/1', context)
-
-    savor.promiseShouldFail(archive.load().then(() => archive.templates.default.load()), done, (error) => {
-        stub.restore()
-        stub2.restore()
-        context.expect(error.message).to.exist
-    })
-}).
-
 add('should load a valid template from an archive', (context, done) => {
     const archive = new Archive({ dir: context.dir, id: 'test-archive', version: '1' })
     const stub = context.stub(npm, 'extract').callsFake(() => Promise.resolve({ version: '1' }))
     const stub2 = context.stub(npm, 'manifest').callsFake(() => Promise.resolve({ version: '1' }))
 
-    savor.addAsset('assets/test-archive', 'test-archive/1', context)
+    savor.addAsset('assets/test-archive', 'test-archive/1/test-archive', context)
 
     const props = { test: "1234" }
     savor.promiseShouldSucceed(archive.load().then(() => archive.templates.default.load(props)), done, (template) => {
@@ -60,7 +46,7 @@ add('should ignore saving a template without files', (context, done) => {
     const stub = context.stub(npm, 'extract').callsFake(() => Promise.resolve({ version: '1' }))
     const stub2 = context.stub(npm, 'manifest').callsFake(() => Promise.resolve({ version: '1' }))
 
-    savor.addAsset('assets/test-archive', 'test-archive/1', context)
+    savor.addAsset('assets/test-archive', 'test-archive/1/test-archive', context)
 
     const props = { test: "1234" }
     const saveProps = {}
@@ -82,7 +68,7 @@ add('should save a template to a destination', (context, done) => {
     const stub = context.stub(npm, 'extract').callsFake(() => Promise.resolve({ version: '1' }))
     const stub2 = context.stub(npm, 'manifest').callsFake(() => Promise.resolve({ version: '1' }))
 
-    savor.addAsset('assets/test-archive', 'test-archive/1', context)
+    savor.addAsset('assets/test-archive', 'test-archive/1/test-archive', context)
 
     const props = { test: "1234" }
     const saveProps = {}

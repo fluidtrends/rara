@@ -138,7 +138,7 @@ class _ {
         return this.load(args).then((output) => {
             fs.writeFileSync(path.resolve(dest, this.filepath), output, 'utf8')
         })
-
+  
     }
 }
 
