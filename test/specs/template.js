@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 
 const savor = require('savor')
-const { Template, Archive } = require('../..')
+const { Template, Archive } = require('../../src')
 const path = require('path')
 const fs = require('fs-extra')
 const npm = require('libnpm')
