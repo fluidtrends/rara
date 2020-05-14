@@ -1,9 +1,9 @@
-export = _;
-declare class _ {
-    constructor(archive: any);
-    _archive: any;
-    get archive(): any;
+import { Archive } from '.';
+export declare class Installer {
+    protected _archive: Archive;
+    constructor(archive: Archive);
+    get archive(): Archive;
     get npmManifestFile(): string;
-    _npm(command: any, options: any): Promise<any>;
-    install(): Promise<any>;
+    _npm(command: string, options: any): Promise<unknown>;
+    install(options: any): Promise<unknown>;
 }

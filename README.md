@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-<a href="https://circleci.com/gh/fluidtrends/workflows/rara"><img src="https://circleci.com/gh/fluidtrends/rara.svg?style=svg"/></a>
+<a href="https://github.com/fluidtrends/rara/actions?query=workflow%3Abuild"><img src="https://github.com/fluidtrends/rara/workflows/build/badge.svg"/></a>
 <a href="https://codeclimate.com/github/fluidtrends/rara/maintainability"><img src="https://api.codeclimate.com/v1/badges/e22794e01b98efc81b34/maintainability" /></a>
 <a href="https://codeclimate.com/github/fluidtrends/rara/test_coverage"><img src="https://api.codeclimate.com/v1/badges/e22794e01b98efc81b34/test_coverage" /></a>
 </p>

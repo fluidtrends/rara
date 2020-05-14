@@ -1,10 +1,31 @@
-const ejs = require('ejs')
-const fs = require('fs-extra')
-const path = require('path')
-const { FileAdapter, ImageAdapter} = require('binda')
+import ejs from 'ejs'
+import fs from 'fs-extra'
+import path from 'path'
+import {
+    IDataFile
+} from '.'
 
-class _ {
-    constructor(props) {
+export class DataFile implements IDataFile {
+    public static ERRORS = {
+        CANNOT_LOAD: (reason: string) => reason ? `Cannot load file because ${reason}` : `Cannot load file`,
+        CANNOT_SAVE: (reason: string) => reason ? `Cannot save file because ${reason}` : `Cannot save file`
+    }    
+
+    public static TYPES = {
+        ASSET: "ASSET_TYPE",
+        IMAGE: ["PNG", "JPG", "JPEG", "GIF", "SVG"],
+        JSON: ["JSON"],
+        JAVASCRIPT: ["JS"],
+        CSS: ["CSS"],
+        MARKDOWN: ["MD"]
+    }
+
+    public static NONCOMPILABLE_TYPES = [ DataFile.TYPES.ASSET, DataFile.TYPES.IMAGE ]
+
+    protected _props: any;
+    protected _type?: string | string[];
+
+    constructor(props?: any) {
         this._props = Object.assign({}, props)
     }
 
@@ -21,7 +42,7 @@ class _ {
     }
 
     get path() {
-        return (!this.dir || !this.filepath) ? null : path.resolve(this.dir, this.filepath)
+        return (!this.dir || !this.filepath) ? "" : path.resolve(this.dir, this.filepath)
     }
 
     get exists() {
@@ -29,7 +50,7 @@ class _ {
     }
 
     get type () {
-        return this._type || _.TYPES.ASSET
+        return this._type || DataFile.TYPES.ASSET
     }
 
     detectType () {
@@ -41,7 +62,7 @@ class _ {
         // Figure out the file's extension
         const ext = path.extname(this.path).toUpperCase().substring(1)
 
-        for (let [type, values] of Object.entries(_.TYPES)) {
+        for (let [type, values] of Object.entries(DataFile.TYPES)) {
             if (values.includes(ext)) {
                 // Looks like we recognize this type
                 this._type = values
@@ -51,10 +72,10 @@ class _ {
     }
 
     get isCompilable() {
-        return !_.NONCOMPILABLE_TYPES.includes(this.type)
+        return !DataFile.NONCOMPILABLE_TYPES.includes(this.type)
     }
 
-    compile(args, options = {}) {
+    compile(args: any, options: any = {}) {
         if (!this.isCompilable) {
             // No need to compile
             return Promise.resolve()
@@ -78,17 +99,17 @@ class _ {
                 const output = template(args)
 
                 // We're good
-                resolve(options.json ? JSON.parse(output, null, 2) : output)
+                resolve(options.json ? JSON.parse(output) : output)
             } catch (error) {
-                reject(new Error(_.ERRORS.CANNOT_LOAD(error.message)))
+                reject(new Error(DataFile.ERRORS.CANNOT_LOAD(error.message)))
             }
         })
     }
 
-    load(args, options = {}) {
+    async load(args?: any, options = {}) {
         if (!this.exists) {
             // First make sure the file exists
-            return Promise.reject(new Error(_.ERRORS.CANNOT_LOAD('it does not exist')))
+            return Promise.reject(new Error(DataFile.ERRORS.CANNOT_LOAD('it does not exist')))
         }
 
         // Let's see if this is a recognized file y]type 
@@ -98,7 +119,7 @@ class _ {
         return this.compile(args, options)
     }
 
-    copy(dest) {
+    async copy(dest: string) {
         // Create sub directories if necessary
         const dir = path.resolve(dest, path.dirname(this.filepath))
         fs.existsSync(dir) || fs.mkdirs(dir)
@@ -111,15 +132,15 @@ class _ {
         })    
     }
 
-    save(dest, args = {}) {
+    async save(dest?: string, args = {}) {
         if (!this.exists) {
             // First make sure the file exists
-            return Promise.reject(new Error(_.ERRORS.CANNOT_SAVE('it does not exist')))
+            return Promise.reject(new Error(DataFile.ERRORS.CANNOT_SAVE('it does not exist')))
         }
         
-        if (!fs.existsSync(dest)) {
+        if (!fs.existsSync(dest!)) {
             // First make sure the destination location
-            return Promise.reject(new Error(_.ERRORS.CANNOT_SAVE('the destination does not exist')))
+            return Promise.reject(new Error(DataFile.ERRORS.CANNOT_SAVE('the destination does not exist')))
         }
 
         // Let's see if this is a recognized file type 
@@ -127,35 +148,16 @@ class _ {
 
         if (!this.isCompilable) {
             // Let's move the file over
-            return this.copy(dest)
+            return this.copy(dest!)
         }
 
         // Create sub directories if necessary
-        const dir = path.resolve(dest, path.dirname(this.filepath))
+        const dir = path.resolve(dest!, path.dirname(this.filepath))
         fs.existsSync(dir) || fs.mkdirsSync(dir)
 
         // Load and then save it
-        return this.load(args).then((output) => {
-            fs.writeFileSync(path.resolve(dest, this.filepath), output, 'utf8')
+        return this.load(args).then((output: any) => {
+            fs.writeFileSync(path.resolve(dest!, this.filepath), output, 'utf8')
         })
-  
     }
 }
-
-_.ERRORS = {
-    CANNOT_LOAD: (reason) => reason ? `Cannot load file because ${reason}` : `Cannot load file`,
-    CANNOT_SAVE: (reason) => reason ? `Cannot save file because ${reason}` : `Cannot save file`
-}
-
-_.TYPES = {
-    ASSET: "ASSET_TYPE",
-    IMAGE: ["PNG", "JPG", "JPEG", "GIF", "SVG"],
-    JSON: ["JSON"],
-    JAVASCRIPT: ["JS"],
-    CSS: ["CSS"],
-    MARKDOWN: ["MD"]
-}
-
-_.NONCOMPILABLE_TYPES = [ _.TYPES.ASSET, _.TYPES.IMAGE ]
-
-module.exports = _

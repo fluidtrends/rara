@@ -1,30 +1,35 @@
-/* eslint-disable no-unused-expressions */
+import savor, {
+    Context,
+    Completion
+} from 'savor'
 
-const savor = require('savor')
-const { File } = require('../../src')
-const path = require('path')
-const fs = require('fs-extra')
+import { 
+    DataFile 
+} from '../../src'
+
+import fs from 'fs-extra'
+import path from 'path'
 
 savor.
 
-add('should not load a file without a path', (context, done) => {
-    const file = new File()
+add('should not load a file without a path', (context: Context, done: Completion) => {
+    const file = new DataFile()
 
     savor.promiseShouldFail(file.load(), done, (error) => {
-        context.expect(error.message).to.equal(File.ERRORS.CANNOT_LOAD('it does not exist'))
+        context.expect(error.message).to.equal(DataFile.ERRORS.CANNOT_LOAD('it does not exist'))
     })
 }).
 
-add('should not load a file with an invalid path', (context, done) => {
-    const file = new File()
+add('should not load a file with an invalid path', (context: Context, done: Completion) => {
+    const file = new DataFile()
 
     savor.promiseShouldFail(file.load(), done, (error) => {
-        context.expect(error.message).to.equal(File.ERRORS.CANNOT_LOAD('it does not exist'))
+        context.expect(error.message).to.equal(DataFile.ERRORS.CANNOT_LOAD('it does not exist'))
     })
 }).
 
-add('should load but not parse empty files', (context, done) => {
-    const file = new File({ dir: context.dir, filepath: 'empty.json' })
+add('should load but not parse empty files', (context: Context, done: Completion) => {
+    const file = new DataFile({ dir: context.dir, filepath: 'empty.json' })
     savor.addAsset('assets/empty.json', 'empty.json', context)
 
     savor.promiseShouldSucceed(file.load(), done, (output) => {
@@ -32,17 +37,17 @@ add('should load but not parse empty files', (context, done) => {
     })
 }).
 
-add('should not load a file with syntax errors', (context, done) => {
-    const file = new File({ path: 'invalid.json' })
+add('should not load a file with syntax errors', (context: Context, done: Completion) => {
+    const file = new DataFile({ path: 'invalid.json' })
     savor.addAsset('assets/invalid.json', 'invalid.json', context)
 
     savor.promiseShouldFail(file.load(), done, (error) => {
-        context.expect(error.message.startsWith(File.ERRORS.CANNOT_LOAD())).to.be.true
+        context.expect(error.message.startsWith(DataFile.ERRORS.CANNOT_LOAD(""))).to.be.true
     })
 }).
 
-add('should load a valid file with some defaults', (context, done) => {
-    const file = new File({ dir: context.dir, filepath: 'test.json' })
+add('should load a valid file with some defaults', (context: Context, done: Completion) => {
+    const file = new DataFile({ dir: context.dir, filepath: 'test.json' })
     savor.addAsset('assets/test.json', 'test.json', context)
 
     savor.promiseShouldSucceed(file.load({ info: "hello12345" }, { json: true }), done, (output) => {
@@ -52,8 +57,8 @@ add('should load a valid file with some defaults', (context, done) => {
     })
 }).
 
-add('should load a valid file and fill in custom tags', (context, done) => {
-    const file = new File({ dir: context.dir, filepath: 'test.json' })
+add('should load a valid file and fill in custom tags', (context: Context, done: Completion) => {
+    const file = new DataFile({ dir: context.dir, filepath: 'test.json' })
     savor.addAsset('assets/test.json', 'test.json', context)
 
     savor.promiseShouldSucceed(file.load({ description: "blue", info: "hello12345" }, { json: true }), done, (output) => {
@@ -63,25 +68,25 @@ add('should load a valid file and fill in custom tags', (context, done) => {
     })
 }).
 
-add('should not save a missing file', (context, done) => {
-    const file = new File({ dir: context.dir, filepath: 'test.json' })
+add('should not save a missing file', (context: Context, done: Completion) => {
+    const file = new DataFile({ dir: context.dir, filepath: 'test.json' })
 
     savor.promiseShouldFail(file.save(), done, (error) => {
-        context.expect(error.message).to.equal(File.ERRORS.CANNOT_SAVE('it does not exist'))
+        context.expect(error.message).to.equal(DataFile.ERRORS.CANNOT_SAVE('it does not exist'))
     })
 }).
 
-add('should not save a file to a missing destination', (context, done) => {
-    const file = new File({ dir: context.dir, filepath: 'hello.png' })
+add('should not save a file to a missing destination', (context: Context, done: Completion) => {
+    const file = new DataFile({ dir: context.dir, filepath: 'hello.png' })
     savor.addAsset('assets/hello.png', 'hello.png', context)
 
     savor.promiseShouldFail(file.save(), done, (error) => {
-        context.expect(error.message).to.equal(File.ERRORS.CANNOT_SAVE('the destination does not exist'))
+        context.expect(error.message).to.equal(DataFile.ERRORS.CANNOT_SAVE('the destination does not exist'))
     })
 }).
 
-add('should save a non compilable file to a destination', (context, done) => {
-    const file = new File({ dir: context.dir, filepath: 'hello.png' })
+add('should save a non compilable file to a destination', (context: Context, done: Completion) => {
+    const file = new DataFile({ dir: context.dir, filepath: 'hello.png' })
     savor.addAsset('assets/hello.png', 'hello.png', context)
 
     const dest = path.resolve(context.dir, 'temp-test')
@@ -96,8 +101,8 @@ add('should save a non compilable file to a destination', (context, done) => {
     })
 }).
 
-add('should save a compilable file to a destination', (context, done) => {
-    const file = new File({ dir: context.dir, filepath: 'test.json' })
+add('should save a compilable file to a destination', (context: Context, done: Completion) => {
+    const file = new DataFile({ dir: context.dir, filepath: 'test.json' })
     savor.addAsset('assets/test.json', 'test.json', context)
 
     const dest = path.resolve(context.dir, 'temp-test')
@@ -117,4 +122,4 @@ add('should save a compilable file to a destination', (context, done) => {
 }).
 
 
-run('[Rara] File')
+run('[Rara] DataFile')

@@ -1,10 +1,15 @@
-const npm = require('npm')
-const libnpm = require('libnpm')
-const fs = require('fs-extra')
-const path = require('path')
+import fs from 'fs-extra'
+import path from 'path'
 
-class _ {
-    constructor(archive) {
+import {
+    Archive,
+    Registry
+} from '.'
+
+export class Installer {
+    protected _archive: Archive;
+    
+    constructor(archive: Archive) {
         this._archive = archive
     }
 
@@ -13,11 +18,11 @@ class _ {
     }
 
     get npmManifestFile() {
-        return path.resolve(this.archive.path, 'package.json')
+        return path.resolve(this.archive.path!, 'package.json')
     }
 
-    _npm(command, options) {
-        if (fs.existsSync(path.resolve(this.archive.path, 'node_modules'))) {
+    _npm(command: string, options: any) {
+        if (fs.existsSync(path.resolve(this.archive.path!, 'node_modules'))) {
             return Promise.resolve({ totalTime: 0, alreadyInstalled: true })
         }
 
@@ -28,30 +33,32 @@ class _ {
         pkg.scripts.___ = `npm ${command} ${options.join(' ')}`
 
         const stdout = process.stdout.write
-        process.stdout.write = Function.prototype
+        process.stdout.write = Function.prototype as any;
 
         const opts = Object.assign({}, { 
-            dir: this.archive.path,
+            path: this.archive.path,
+            pkg, 
+            event: "___",
             silent: true,
             stdio: ['ignore', 'ignore', 'ignore'],
             config: {}
         }, this.archive.npmOptions)
 
         return new Promise((resolve, reject) => {
-            libnpm.runScript(pkg, "___", null, opts)
+            Registry.runScript(opts)
                      .then(() => {
                         const totalTime = (Date.now() - startTime)        
                         process.stdout.write = stdout
                         resolve ({ totalTime, installed: true })
                      }) 
-                     .catch((error) => {
+                     .catch((error: Error) => {
                         process.stdout.write = stdout
                         reject(error)
                      })
         })
     }
 
-    install() {
+    install(options: any) {
         const npmManifest = this.npmManifestFile
 
         if (!fs.existsSync(npmManifest)) {
@@ -61,5 +68,3 @@ class _ {
         return this._npm('install', ['--loglevel=error', '--no-progress', '--silent', '--no-audit'])
     }
 }
-
-module.exports = _
