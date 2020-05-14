@@ -1,4 +1,4 @@
-/// <reference path="modules.d.ts" />
+/// <reference path="../lib/modules.d.ts" />
 import * as pacote from 'pacote'
 import cli from '@npmcli/run-script'
 

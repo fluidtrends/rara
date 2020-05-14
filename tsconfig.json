@@ -12,7 +12,7 @@
       "outDir": "./lib"
     },
     "include": [
-      "./src/**/*"
+      "./src/**/*", "lib/modules.d.ts"
     ]
 }
   
