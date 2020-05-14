@@ -1,3 +1,7 @@
-export const File: any;
-export const Archive: any;
-export const Template: any;
+export * from './DataFile';
+export * from './Archive';
+export * from './Installer';
+export * from './Logger';
+export * from './Template';
+export * as Registry from './Registry';
+export * from './types';

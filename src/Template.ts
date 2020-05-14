@@ -1,9 +1,15 @@
-const path = require('path')
-const fs = require('fs-extra')
-const cpy = require('cpy')
+import fs from 'fs-extra'
+import path from 'path'
+import cpy from 'cpy'
 
-class _ {
-    constructor(props) {
+export class Template {
+    protected _props: any;
+    protected _name: string;
+    protected _dir: string;
+    protected _path: string;
+    protected _content?: any;
+
+    constructor(props: any) {
         this._props = Object.assign({}, props)
         this._name = this.props.name
         this._dir = this.props.dir
@@ -34,11 +40,11 @@ class _ {
         return this._content
     }
 
-    load(props) {
+    load(props: any) {
         return new Promise((resolve, reject) => {
             try {
-                const Template = require(this.path)
-                this._content = new Template(props)
+                const Tpl = require(this.path)
+                this._content = new Tpl(props)
                 resolve(this)
             } catch (e) {
                 reject(e)
@@ -46,11 +52,11 @@ class _ {
         })
     }
 
-    saveGlobs({ dest, glob, props }) {
-        return cpy(glob, dest, props)
+    saveGlobs(data: any) {
+        return cpy(data.glob, data.dest, data.props)
     }
 
-    save(dest, props) {
+    save(dest: string, props: any) {
         if (!this.content || !this.content.files) {
             // Let's not break, but don't do anything
             return Promise.resolve()
@@ -60,9 +66,7 @@ class _ {
         fs.existsSync(dest) || fs.mkdirsSync(dest)
 
         // Save all the local and global globs
-        return Promise.all(this.content.files.map(glob => this.saveGlobs({ dest, glob, props: { cwd: this.path, parents: true }}))
-                   .concat(this.content.archiveFiles.map(glob => this.saveGlobs({ dest, glob, props: { cwd: this.dir, parents: true }}))))
+        return Promise.all(this.content.files.map((glob: any) => this.saveGlobs({ dest, glob, props: { cwd: this.path, parents: true }}))
+                   .concat(this.content.archiveFiles.map((glob: any) => this.saveGlobs({ dest, glob, props: { cwd: this.dir, parents: true }}))))
     }
 }
-
-module.exports = _

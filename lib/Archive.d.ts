@@ -1,43 +1,38 @@
-export = _;
-declare class _ {
+import { DataFile, Logger, Installer } from '.';
+export declare class Archive {
+    protected _props: any;
+    protected _installer: Installer;
+    protected _logger: Logger;
+    protected _version?: string;
+    protected _manifest?: any;
+    protected _files?: DataFile[];
+    protected _templates?: any;
+    static ERRORS: {
+        CANNOT_LOAD: (reason: string) => string;
+    };
+    static IGNORES: string[];
     constructor(props: any);
-    _props: any;
-    _installer: import("./Installer");
-    _logger: import("./Logger");
     get props(): any;
-    get installer(): import("./Installer");
-    get logger(): import("./Logger");
+    get installer(): Installer;
+    get logger(): Logger;
     get id(): any;
-    get archiveId(): any;
+    get archiveId(): string;
     get version(): any;
     get dir(): any;
     get path(): string | null;
-    get exists(): any;
-    get files(): any;
-    get templates(): {} | undefined;
+    get exists(): boolean | "" | null;
+    get files(): DataFile[] | undefined;
+    get templates(): any;
     get manifest(): any;
     get npmOptions(): {
-        log: {
-            clearProgress: Function;
-            showProgress: Function;
-        };
+        log: any;
     };
-    initialize(): any;
-    _version: any;
-    _manifest: any;
-    installDependencies(): any;
+    initialize(): Promise<void>;
+    installDependencies(): Promise<unknown>;
     loadTemplates(): void;
-    _templates: {} | undefined;
-    ignoreFileIfNecessary(f: any): boolean;
-    loadFiles(): Promise<_>;
-    _files: any;
-    load(): any;
-    save(dest: any, args?: {}): any;
-    download(): any;
-}
-declare namespace _ {
-    export namespace ERRORS {
-        export function CANNOT_LOAD(reason: any): string;
-    }
-    export const IGNORES: string[];
+    ignoreFileIfNecessary(f: string): boolean;
+    loadFiles(): Promise<this>;
+    load(): Promise<this>;
+    save(dest: string, args?: {}): Promise<unknown[]>;
+    download(): Promise<import("pacote").FetchResult>;
 }

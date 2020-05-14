@@ -1,17 +1,23 @@
-/* eslint-disable no-unused-expressions */
+import savor, {
+    Context,
+    Completion
+} from 'savor'
 
-const savor = require('savor')
-const { Template, Archive } = require('../../src')
-const path = require('path')
-const fs = require('fs-extra')
-const npm = require('libnpm')
+import { 
+    Archive,
+    Registry,
+    Template
+} from '../../src'
+
+import fs from 'fs-extra'
+import path from 'path'
 
 savor.
 
-add('should find a valid template in an archive', (context, done) => {
+add('should find a valid template in an archive', (context: Context, done: Completion) => {
     const archive = new Archive({ dir: context.dir, id: 'test-archive', version: '1' })
-    const stub = context.stub(npm, 'extract').callsFake(() => Promise.resolve({ version: '1' }))
-    const stub2 = context.stub(npm, 'manifest').callsFake(() => Promise.resolve({ version: '1' }))
+    const stub = context.stub(Registry, 'extract').callsFake(() => Promise.resolve({ version: '1' }))
+    const stub2 = context.stub(Registry, 'manifest').callsFake(() => Promise.resolve({ version: '1' }))
 
     savor.addAsset('assets/test-archive', 'test-archive/1/test-archive', context)
 
@@ -25,10 +31,10 @@ add('should find a valid template in an archive', (context, done) => {
     })
 }).
 
-add('should load a valid template from an archive', (context, done) => {
+add('should load a valid template from an archive', (context: Context, done: Completion) => {
     const archive = new Archive({ dir: context.dir, id: 'test-archive', version: '1' })
-    const stub = context.stub(npm, 'extract').callsFake(() => Promise.resolve({ version: '1' }))
-    const stub2 = context.stub(npm, 'manifest').callsFake(() => Promise.resolve({ version: '1' }))
+    const stub = context.stub(Registry, 'extract').callsFake(() => Promise.resolve({ version: '1' }))
+    const stub2 = context.stub(Registry, 'manifest').callsFake(() => Promise.resolve({ version: '1' }))
 
     savor.addAsset('assets/test-archive', 'test-archive/1/test-archive', context)
 
@@ -41,10 +47,10 @@ add('should load a valid template from an archive', (context, done) => {
     })
 }).
 
-add('should ignore saving a template without files', (context, done) => {
+add('should ignore saving a template without files', (context: Context, done: Completion) => {
     const archive = new Archive({ dir: context.dir, id: 'test-archive', version: '1' })
-    const stub = context.stub(npm, 'extract').callsFake(() => Promise.resolve({ version: '1' }))
-    const stub2 = context.stub(npm, 'manifest').callsFake(() => Promise.resolve({ version: '1' }))
+    const stub = context.stub(Registry, 'extract').callsFake(() => Promise.resolve({ version: '1' }))
+    const stub2 = context.stub(Registry, 'manifest').callsFake(() => Promise.resolve({ version: '1' }))
 
     savor.addAsset('assets/test-archive', 'test-archive/1/test-archive', context)
 
@@ -63,10 +69,10 @@ add('should ignore saving a template without files', (context, done) => {
     })
 }).
 
-add('should save a template to a destination', (context, done) => {
+add('should save a template to a destination', (context: Context, done: Completion) => {
     const archive = new Archive({ dir: context.dir, id: 'test-archive', version: '1' })
-    const stub = context.stub(npm, 'extract').callsFake(() => Promise.resolve({ version: '1' }))
-    const stub2 = context.stub(npm, 'manifest').callsFake(() => Promise.resolve({ version: '1' }))
+    const stub = context.stub(Registry, 'extract').callsFake(() => Promise.resolve({ version: '1' }))
+    const stub2 = context.stub(Registry, 'manifest').callsFake(() => Promise.resolve({ version: '1' }))
 
     savor.addAsset('assets/test-archive', 'test-archive/1/test-archive', context)
 

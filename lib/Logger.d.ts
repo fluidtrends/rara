@@ -1,19 +1,10 @@
-export = _;
-declare class _ {
+export declare class Logger {
+    protected _props: any;
+    protected _raw: any;
+    static LEVELS: string[];
     constructor(props: any);
-    _props: any;
-    _raw: {
-        clearProgress: Function;
-        showProgress: Function;
-    };
     get props(): any;
     get silent(): any;
-    get raw(): {
-        clearProgress: Function;
-        showProgress: Function;
-    };
-    log(level: any): (category: any, ...args: any[]) => any;
-}
-declare namespace _ {
-    export const LEVELS: string[];
+    get raw(): any;
+    log(level: string): void;
 }
