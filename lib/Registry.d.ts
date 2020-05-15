@@ -1,4 +1,4 @@
-/// <reference path="../src/modules.d.ts" />
+/// <reference path="modules.d.ts" />
 import * as pacote from 'pacote';
 import cli from '@npmcli/run-script';
 export declare const manifest: typeof pacote.manifest;
