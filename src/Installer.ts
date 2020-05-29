@@ -35,7 +35,7 @@ export class Installer {
         return { totalTime, installed: true }
     }
 
-    async install(options: any) {
+    async install() {
         const npmManifest = this.npmManifestFile
 
         if (!fs.existsSync(npmManifest)) {

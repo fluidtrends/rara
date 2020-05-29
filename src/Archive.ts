@@ -92,18 +92,18 @@ export class Archive {
     async initialize() { 
         if (this.version) {
             // No need to fetch the version
-            return Promise.resolve()
+            return undefined
         }
+
+        const manifest = await Registry.manifest(this.archiveId)
         
-        return Registry.manifest(this.archiveId, this.npmOptions).then((manifest: any) => {
-            this._version = `${manifest.version}`
-            this._manifest = Object.assign({}, manifest)
-        })
+        this._version = `${manifest.version}`
+        this._manifest = Object.assign({}, manifest)
     }
 
     async installDependencies() {
-        return this.initialize()
-                   .then(() => this.installer.install(this.npmOptions))
+        await this.initialize()
+        return this.installer.install()
     }
 
     loadTemplates() {
