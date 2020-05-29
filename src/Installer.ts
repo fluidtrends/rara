@@ -1,4 +1,4 @@
-import fs from 'fs-extra'
+import fs from 'fs'
 import path from 'path'
 
 import {
@@ -21,48 +21,25 @@ export class Installer {
         return path.resolve(this.archive.path!, 'package.json')
     }
 
-    _npm(command: string, options: any) {
+    async _npm(command: string, options: any) {
         if (fs.existsSync(path.resolve(this.archive.path!, 'node_modules'))) {
-            return Promise.resolve({ totalTime: 0, alreadyInstalled: true })
+            return { totalTime: 0, alreadyInstalled: true }
         }
 
         const startTime = Date.now()
 
-        const pkg = JSON.parse(fs.readFileSync(this.npmManifestFile, 'utf8'))
-        pkg.scripts = pkg.scripts || {}
-        pkg.scripts.___ = `npm ${command} ${options.join(' ')}`
+        process.chdir(this.archive.path!)
+        await Registry.npm('install --only=prod --silent --no-warnings --no-progress')
 
-        const stdout = process.stdout.write
-        process.stdout.write = Function.prototype as any;
-
-        const opts = Object.assign({}, { 
-            path: this.archive.path,
-            pkg, 
-            event: "___",
-            silent: true,
-            stdio: ['ignore', 'ignore', 'ignore'],
-            config: {}
-        }, this.archive.npmOptions)
-
-        return new Promise((resolve, reject) => {
-            Registry.runScript(opts)
-                     .then(() => {
-                        const totalTime = (Date.now() - startTime)        
-                        process.stdout.write = stdout
-                        resolve ({ totalTime, installed: true })
-                     }) 
-                     .catch((error: Error) => {
-                        process.stdout.write = stdout
-                        reject(error)
-                     })
-        })
+        const totalTime = (Date.now() - startTime)        
+        return { totalTime, installed: true }
     }
 
-    install(options: any) {
+    async install(options: any) {
         const npmManifest = this.npmManifestFile
 
         if (!fs.existsSync(npmManifest)) {
-            return Promise.resolve({ totalTime: 0, skipped: true })
+            return { totalTime: 0, skipped: true }
         }
 
         return this._npm('install', ['--loglevel=error', '--no-progress', '--silent', '--no-audit'])
