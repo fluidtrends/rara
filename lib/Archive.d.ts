@@ -27,7 +27,7 @@ export declare class Archive {
     get npmOptions(): {
         log: any;
     };
-    initialize(): Promise<void>;
+    initialize(): Promise<undefined>;
     installDependencies(): Promise<{
         totalTime: number;
         alreadyInstalled: boolean;

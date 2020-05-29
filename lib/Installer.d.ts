@@ -13,7 +13,7 @@ export declare class Installer {
         installed: boolean;
         alreadyInstalled?: undefined;
     }>;
-    install(options: any): Promise<{
+    install(): Promise<{
         totalTime: number;
         alreadyInstalled: boolean;
         installed?: undefined;
