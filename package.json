@@ -1,7 +1,7 @@
 {
   "name": "rara",
-  "version": "1.9.1",
-  "description": "Remote Armophous Resource Archive",
+  "version": "1.9.2",
+  "description": "RESTful Armophous Resource Archive",
   "scripts": {
     "build": "rm -rf lib && mkdir lib && cp src/*.d.ts lib && tsc",
     "test": "savor test",
