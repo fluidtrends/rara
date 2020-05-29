@@ -40,10 +40,10 @@ export declare class Archive {
         totalTime: number;
         skipped: boolean;
     }>;
+    download(): Promise<import("pacote").FetchResult>;
     loadTemplates(): void;
     ignoreFileIfNecessary(f: string): boolean;
     loadFiles(): Promise<this>;
     load(): Promise<this>;
     save(dest: string, args?: {}): Promise<unknown[]>;
-    download(): Promise<import("pacote").FetchResult>;
 }
