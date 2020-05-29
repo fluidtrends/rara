@@ -28,7 +28,18 @@ export declare class Archive {
         log: any;
     };
     initialize(): Promise<void>;
-    installDependencies(): Promise<unknown>;
+    installDependencies(): Promise<{
+        totalTime: number;
+        alreadyInstalled: boolean;
+        installed?: undefined;
+    } | {
+        totalTime: number;
+        installed: boolean;
+        alreadyInstalled?: undefined;
+    } | {
+        totalTime: number;
+        skipped: boolean;
+    }>;
     loadTemplates(): void;
     ignoreFileIfNecessary(f: string): boolean;
     loadFiles(): Promise<this>;
