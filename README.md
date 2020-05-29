@@ -1,8 +1,8 @@
 <p align="center"> <img src="https://raw.githubusercontent.com/fluidtrends/rara/master/logo.png" width="256px"> 
 
 <h1 align="center"> Rara </h1>
-<h3 align="center"> RESTful Amorphous Resource Archiver </h3>
-<p align="center"> Manage archives like they are APIs </p>
+<h3 align="center"> RESTful Amorphous Resource Archive </h3>
+<p align="center"> Manage an archive as if it were an API </p>
 <p align="center"> <img src="https://img.shields.io/github/package-json/v/idancali/rara?color=green"/></p>
 
 </p>
