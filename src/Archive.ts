@@ -106,6 +106,11 @@ export class Archive {
         return this.installer.install()
     }
 
+    async download () {
+        await this.initialize()
+        return await Registry.extract(this.archiveId, this.path!)
+    }
+
     loadTemplates() {
         const templatesDir = path.resolve(this.path!, 'templates')
         this._templates = {}
@@ -147,10 +152,5 @@ export class Archive {
         fs.existsSync(dest) || fs.mkdirsSync(dest)
 
         return this.load().then(() => Promise.all(this.files!.map(file => file.save(dest, args)))) 
-    }
-
-    async download () {
-        return this.initialize()
-                   .then(() => Registry.extract(this.archiveId, this.path!, this.npmOptions))
     }
 }
