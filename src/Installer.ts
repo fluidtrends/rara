@@ -27,11 +27,14 @@ export class Installer {
         }
 
         const startTime = Date.now()
-
+        const cwd = process.cwd()
         process.chdir(this.archive.path!)
-        await Registry.npm('install --only=prod --silent --no-warnings --no-progress')
+        
+        await Registry.npm(`${command} ${options.join(' ')}`)
 
         const totalTime = (Date.now() - startTime)        
+        process.chdir(cwd)
+
         return { totalTime, installed: true }
     }
 
@@ -42,6 +45,6 @@ export class Installer {
             return { totalTime: 0, skipped: true }
         }
 
-        return this._npm('install', ['--loglevel=error', '--no-progress', '--silent', '--no-audit'])
+        return this._npm('install', ['--only=prod', '--no-warnings', '--loglevel=error', '--no-progress', '--silent', '--no-audit'])
     }
 }
