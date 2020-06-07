@@ -30,7 +30,7 @@ export class Installer {
     
         const installed = await Registry.install({
             module: this.archive.archiveId,
-            to: this.archive.path
+            to: this.archive.dir
         })
 
         const totalTime = (Date.now() - startTime)        
