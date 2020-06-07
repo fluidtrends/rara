@@ -28,7 +28,7 @@ export declare class Archive {
         log: any;
     };
     initialize(): Promise<undefined>;
-    installDependencies(): Promise<{
+    installDependencies(msg?: [string, string]): Promise<{
         totalTime: number;
         alreadyInstalled: boolean;
     } | {
