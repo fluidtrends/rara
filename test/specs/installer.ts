@@ -18,7 +18,7 @@ add('should handle npm load error',  (context: Context, done: Completion)=> {
 
     savor.addAsset('assets/test-archive', 'test-archive/1/test-archive', context)
 
-    savor.promiseShouldFail(archive.installDependencies(), done, (error) => {
+    savor.promiseShouldFail(archive.install(), done, (error) => {
         context.expect(error.message).to.equal('oops')
         stub.restore()
         stub2.restore()
@@ -35,7 +35,7 @@ add('should install dependencies',  (context: Context, done: Completion)=> {
 
     savor.addAsset('assets/test-archive', 'test-archive/1/test-archive', context)
 
-    savor.promiseShouldSucceed(archive.installDependencies(), done, (result) => {
+    savor.promiseShouldSucceed(archive.install(), done, (result) => {
         context.expect(result.installed).to.be.true
 
         stub.restore()

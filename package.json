@@ -1,6 +1,6 @@
 {
   "name": "rara",
-  "version": "1.9.6",
+  "version": "1.9.8",
   "description": "RESTful Armophous Resource Archive",
   "scripts": {
     "build": "rm -rf lib && mkdir lib && cp src/*.d.ts lib && tsc",
@@ -38,7 +38,7 @@
     "fs-extra": "^9.0.0",
     "got": "^10.5.5",
     "image-downloader": "^3.5.0",
-    "nodu": "^1.9.0",
+    "nodu": "^1.9.1",
     "pacote": "^11.1.10",
     "platform": "^1.3.5",
     "uuid": "^3.0.0"
