@@ -101,9 +101,9 @@ export class Archive {
         this._manifest = Object.assign({}, manifest)
     }
 
-    async installDependencies() {
+    async installDependencies(msg?: [string, string]) {
         await this.initialize()
-        return this.installer.install()
+        return this.installer.install(msg)
     }
 
     async download () {
