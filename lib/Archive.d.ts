@@ -31,7 +31,6 @@ export declare class Archive {
     installDependencies(): Promise<{
         totalTime: number;
         alreadyInstalled: boolean;
-        installed?: undefined;
     } | {
         totalTime: number;
         installed: boolean;

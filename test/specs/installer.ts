@@ -14,7 +14,7 @@ add('should handle npm load error',  (context: Context, done: Completion)=> {
     const archive = new Archive({ dir: context.dir, id: 'test-archive' })
     const stub = context.stub(Registry, 'extract').callsFake(() => Promise.resolve({ version: '1' }))
     const stub2 = context.stub(Registry, 'manifest').callsFake(() => Promise.resolve({ version: '1' }))
-    const stub3 = context.stub(Registry, 'npm').callsFake(() => Promise.reject(new Error('oops')))
+    const stub3 = context.stub(Registry, 'install').callsFake(() => Promise.reject(new Error('oops')))
 
     savor.addAsset('assets/test-archive', 'test-archive/1/test-archive', context)
 
@@ -31,7 +31,7 @@ add('should install dependencies',  (context: Context, done: Completion)=> {
     const archive = new Archive({ dir: context.dir, id: 'test-archive' })
     const stub = context.stub(Registry, 'extract').callsFake(() => Promise.resolve({ version: '1' }))
     const stub2 = context.stub(Registry, 'manifest').callsFake(() => Promise.resolve({ version: '1' }))
-    const stub3 = context.stub(Registry, 'npm').callsFake(() => Promise.resolve('ok'))
+    const stub3 = context.stub(Registry, 'install').callsFake(() => Promise.resolve('ok'))
 
     savor.addAsset('assets/test-archive', 'test-archive/1/test-archive', context)
 
