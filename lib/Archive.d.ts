@@ -35,9 +35,6 @@ export declare class Archive {
         totalTime: number;
         installed: boolean;
         alreadyInstalled?: undefined;
-    } | {
-        totalTime: number;
-        skipped: boolean;
     }>;
     download(): Promise<import("pacote").FetchResult>;
     loadTemplates(): void;

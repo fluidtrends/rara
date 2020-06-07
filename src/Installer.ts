@@ -21,7 +21,7 @@ export class Installer {
         return path.resolve(this.archive.path!, 'package.json')
     }
 
-    async _npmInstall(msg?: [string, string]) {
+    async install(msg?: [string, string]) {
         if (fs.existsSync(path.resolve(this.archive.path!, 'node_modules'))) {
             return { totalTime: 0, alreadyInstalled: true }
         }
@@ -36,15 +36,5 @@ export class Installer {
         const totalTime = (Date.now() - startTime)        
 
         return { totalTime, installed: true, ...installed }
-    }
-
-    async install(msg?: [string, string]) {
-        const npmManifest = this.npmManifestFile
-
-        if (!fs.existsSync(npmManifest)) {
-            return { totalTime: 0, skipped: true }
-        }
-
-        return this._npmInstall(msg)
     }
 }

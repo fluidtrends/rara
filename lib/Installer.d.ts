@@ -4,7 +4,7 @@ export declare class Installer {
     constructor(archive: Archive);
     get archive(): Archive;
     get npmManifestFile(): string;
-    _npmInstall(msg?: [string, string]): Promise<{
+    install(msg?: [string, string]): Promise<{
         totalTime: number;
         alreadyInstalled: boolean;
     } | {
@@ -20,16 +20,5 @@ export declare class Installer {
         totalTime: number;
         installed: boolean;
         alreadyInstalled?: undefined;
-    }>;
-    install(msg?: [string, string]): Promise<{
-        totalTime: number;
-        alreadyInstalled: boolean;
-    } | {
-        totalTime: number;
-        installed: boolean;
-        alreadyInstalled?: undefined;
-    } | {
-        totalTime: number;
-        skipped: boolean;
     }>;
 }
